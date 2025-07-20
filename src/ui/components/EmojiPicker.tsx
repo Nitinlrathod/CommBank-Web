@@ -1,20 +1,23 @@
-import { BaseEmoji, Picker } from 'emoji-mart'
+import React from 'react'
+import { Picker } from 'emoji-mart'
 import 'emoji-mart/css/emoji-mart.css'
-import { useAppSelector } from '../../store/hooks'
-import { selectMode } from '../../store/themeSlice'
 
-type Props = { onClick: (emoji: BaseEmoji, event: React.MouseEvent) => void }
+interface EmojiPickerProps {
+  onSelect: (emoji: string) => void
+  onClose?: () => void
+}
 
-export default function EmojiPicker(props: Props) {
-  const theme = useAppSelector(selectMode)
-
+export const EmojiPicker: React.FC<EmojiPickerProps> = ({ onSelect, onClose }) => {
   return (
-    <Picker
-      theme={theme}
-      showPreview={false}
-      showSkinTones={false}
-      onClick={props.onClick}
-      color="primary"
-    />
+    <div style={{ position: 'absolute', zIndex: 1000 }}>
+      <Picker
+        set="apple"
+        onSelect={(emoji: any) => {
+          onSelect(emoji.native)
+          onClose?.()
+        }}
+        showPreview={false}
+      />
+    </div>
   )
 }
